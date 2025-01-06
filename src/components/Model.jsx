@@ -1,13 +1,14 @@
 import { useGSAP } from "@gsap/react"
 import gsap from "gsap";
 import ModelView from "./ModelView";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { yellowImg } from "../utils";
 import * as THREE from 'three';
 import { Canvas } from "@react-three/fiber";
 import { View } from "@react-three/drei";
 import { models, sizes } from "../constants";
 import { animateWithGsapTimeline } from "../utils/animation";
+import Loader from "./Loader";
 
 const Model = () => {
   const [size, setSize] = useState('small');
@@ -60,6 +61,8 @@ const Model = () => {
 
         <div className="flex flex-col items-center mt-5">
           <div className="w-full h-[75vh] md:h-[90vh] overflow-hidden relative">
+
+            <Suspense fallback={<Loader/>} >
             <ModelView 
               index={1}
               groupRef={small}
@@ -68,8 +71,10 @@ const Model = () => {
               setRotationState={setSmallRotation}
               item={model}
               size={size}
-            />  
+            /> 
+            </Suspense> 
 
+            <Suspense fallback={<Loader/>} >
             <ModelView 
               index={2}
               groupRef={large}
@@ -79,6 +84,7 @@ const Model = () => {
               item={model}
               size={size}
             />
+            </Suspense>
 
             <Canvas
               className="w-full h-full"
